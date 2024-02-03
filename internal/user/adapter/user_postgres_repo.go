@@ -28,3 +28,20 @@ func (u *userRepo) Save(user *domain.User) error {
 
 	return nil
 }
+
+func (u *userRepo) UserExistByEmail(email string) (bool, error) {
+	var exist bool
+	queryStatement :=
+		`SELECT EXISTS (
+			SELECT 1
+			FROM users
+			WHERE email = $1
+		)`
+
+	err := u.db.QueryRow(queryStatement, email).Scan(&exist)
+	if err != nil {
+		return false, err
+	}
+
+	return exist, nil
+}

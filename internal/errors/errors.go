@@ -8,6 +8,11 @@ func (u UserError) Error() string {
 }
 
 const (
-	ErrFailedExecQuery UserError = "failed to execute query"
-	ErrUserNotFound    UserError = "user not found"
+	ErrFailedExecQuery    UserError = "failed to execute query"
+	ErrBadCredentials     UserError = "bad credentials"
+	ErrInvalidPassword    UserError = "invalid password"
+	ErrInvalidEmailFormat UserError = "invalid format email"
+	ErrEmptyName          UserError = "empty name"
+	ErrEmptyMail          UserError = "empty email"
+	ErrInvalidPhoneNumber UserError = "invalid phone number"
 )

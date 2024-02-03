@@ -1,6 +1,22 @@
 syntax = "proto3";
 
-package post;
+package product;
 
-option go_package = "/pb";
+option go_package = "/product";
 
+service ProductService {
+    rpc CreateProduct(ProductRequest)returns(EmptyResponse){}
+}
+
+message EmptyResponse {
+}
+
+message ProductRequest {
+    string name = 1;
+    int32 price = 2;
+    int32 count = 3;
+  
+}
+message ID {
+    uint32 ID =1;
+}

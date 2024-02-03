@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"Clean-Sweep-Solutions_/internal/errors"
+	"Clean-sweep-solution/internal/errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"math/rand"

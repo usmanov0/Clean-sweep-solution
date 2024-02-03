@@ -1,8 +1,8 @@
 package app
 
 import (
-	"Clean-Sweep-Solutions_/internal/user/domain"
-	"Clean-Sweep-Solutions_/internal/utils"
+	"Clean-sweep-solution/internal/user/domain"
+	"Clean-sweep-solution/internal/utils"
 	"errors"
 	"fmt"
 	"log"

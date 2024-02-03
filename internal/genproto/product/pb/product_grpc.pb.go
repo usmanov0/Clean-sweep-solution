@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: proto/product.proto
 
-package product
+package pb
 
 import (
 	context "context"
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ProductService_CreateProduct_FullMethodName = "/product.ProductService/CreateProduct"
+	ProductService_CreateProduct_FullMethodName = "/pb.ProductService/CreateProduct"
 )
 
 // ProductServiceClient is the client API for ProductService service.
@@ -96,7 +96,7 @@ func _ProductService_CreateProduct_Handler(srv interface{}, ctx context.Context,
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ProductService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "product.ProductService",
+	ServiceName: "pb.ProductService",
 	HandlerType: (*ProductServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

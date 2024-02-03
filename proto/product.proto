@@ -1,8 +1,10 @@
 syntax = "proto3";
 
-package product;
+package pb;
 
-option go_package = "/product";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "/pb";
 
 service ProductService {
     rpc CreateProduct(ProductRequest)returns(EmptyResponse){}
@@ -15,8 +17,9 @@ message ProductRequest {
     string name = 1;
     int32 price = 2;
     int32 count = 3;
-  
+    google.protobuf.Timestamp created_at = 4; 
 }
+
 message ID {
     uint32 ID =1;
 }

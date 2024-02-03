@@ -1,7 +1,20 @@
 package adapter
 
-import "github.com/jackc/pgx"
+import (
+	"Clean-sweep-solution/internal/genproto/product/pb"
+	"Clean-sweep-solution/internal/product/domain"
+	"context"
 
-type ProductRepo struct{
-	*pgx.Conn
+	"github.com/jackc/pgx"
+)
+
+type productRepo struct {
+	db *pgx.Conn
 }
+
+func NewProductRepo(db *pgx.Conn) domain.ProductRepository {
+	return &productRepo{db: db}
+}
+
+
+

@@ -31,4 +31,14 @@ func NewClient(port string) (*Client, error) {
 	}, nil
 }
 
+func (c *Client) CloseConnection() error {
+	return c.conn.Close()
+}
 
+func (c *Client) CreateProduct(ctx context.Context, product product_pb.ProductRequest)error{
+	_,err :=c.productClient.CreateProduct(ctx,&product)
+	if err!=nil{
+		return err
+	}
+	return nil
+}

@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"github.com/lib/pq"
 	"time"
 )
 
@@ -21,5 +20,12 @@ type User struct {
 	Role      UserRole
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	DeletedAt pq.NullTime
+	DeletedAt *time.Time
+}
+
+type NewUser struct {
+	FullName string
+	Email    string
+	Phone    string
+	Password string
 }

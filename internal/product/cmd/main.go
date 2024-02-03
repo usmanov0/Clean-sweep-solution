@@ -27,6 +27,10 @@ func main() {
 	productUseCase := app.NewProductUseCase(productRepo)
 	productServer := server.NewProductServer(productUseCase)
 
-
+	srv :=server.NewServer(&productServer)
+	if err := srv.ListenAndServe(os.Getenv("PRODUCT_PORT")); err != nil {
+		log.Println(err)
+	}
+	log.Println(os.Getenv("PRODUCT_PORT"))
 
 }

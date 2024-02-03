@@ -23,5 +23,10 @@ func main() {
 
 	defer db.Close()
 
+	productRepo := adapter.NewProductRepo(db)
+	productUseCase := app.NewProductUseCase(productRepo)
+	productServer := server.NewProductServer(productUseCase)
+
+
 
 }

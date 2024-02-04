@@ -1,8 +1,8 @@
 package adapter
 
 import (
-	"Clean-Sweep-Solutions/internal/user/domain"
-	"Clean-Sweep-Solutions/pkg/errors"
+	"example.com/m/internal/user/domain"
+	"example.com/m/pkg/errors"
 	"github.com/jackc/pgx"
 )
 

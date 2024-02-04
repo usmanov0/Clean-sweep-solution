@@ -63,8 +63,10 @@ func (u *userUseCase) SignUpAdmin(admin *domain.NewUser) error {
 func (u *userUseCase) SignUpUser(user *domain.NewUser) error {
 	userSignUp := u.userFactory.CreateUser(user)
 
-	err := utils.ValidateUserInfoForSignIn(
+	err := utils.ValidateUserInfoForSignUp(
+		userSignUp.FullName,
 		userSignUp.Email,
+		userSignUp.Phone,
 		userSignUp.Password,
 	)
 
@@ -97,9 +99,23 @@ func (u *userUseCase) SignInUser(email, password string) (bool, error) {
 		return false, nil
 	}
 
-	ok, err := u.userRepo.UserExistByEmail(email)
-	if !ok || err != nil {
+	userExists, err := u.userRepo.UserExistByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	if !userExists {
 		return false, errors.ErrUserNotFound
+	}
+
+	hashedPassword, err := u.userRepo.GetHashedPasswordByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	err = utils.CheckPassword(password, hashedPassword)
+	if err != nil {
+		return false, errors.ErrBadCredentials
 	}
 
 	return true, nil

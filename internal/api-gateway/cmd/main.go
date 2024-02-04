@@ -27,5 +27,16 @@ func main() {
 	}
 	defer auditClient.CloseConnection()
 
-	
+	handlers := rest.NewHandler(*auditClient)
+
+	srv := &http.Server{
+		Addr:    fmt.Sprintf("%v", os.Getenv("HTTP_PORT")),
+		Handler: handlers.InitRouters(),
+	}
+
+	log.Println("SERVER STARTED")
+
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatal(err)
+	}
 }

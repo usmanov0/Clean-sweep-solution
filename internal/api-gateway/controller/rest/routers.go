@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerfile "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	_ "Clean-sweep-solution/internal/api-gateway/docs"
+	_ "clean-sweep-solution/internal/api-gateway/docs"
 )
 
 func (h *Handler) InitRouters() *gin.Engine {

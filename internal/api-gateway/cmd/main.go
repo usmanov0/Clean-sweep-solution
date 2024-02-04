@@ -1,8 +1,8 @@
 package main
 
 import (
-	grpc_client "Clean-sweep-solution/internal/api-gateway/controller/grpc"
-	"Clean-sweep-solution/internal/api-gateway/controller/rest"
+	grpc_client "clean-sweep-solution/internal/api-gateway/controller/grpc"
+	"clean-sweep-solution/internal/api-gateway/controller/rest"
 	"fmt"
 	"log"
 	"net/http"

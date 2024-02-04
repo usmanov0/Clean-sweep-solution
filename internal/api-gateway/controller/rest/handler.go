@@ -1,8 +1,8 @@
 package rest
 
 import (
-	grpc_client "Clean-sweep-solution/internal/api-gateway/controller/grpc"
-	"Clean-sweep-solution/internal/genproto/product/pb"
+	grpc_client "clean-sweep-solution/internal/api-gateway/controller/grpc"
+	"clean-sweep-solution/internal/genproto/product/pb"
 	"context"
 	"encoding/json"
 	"io"

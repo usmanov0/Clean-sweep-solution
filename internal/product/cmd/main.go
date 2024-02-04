@@ -1,10 +1,10 @@
 package main
 
 import (
-	"Clean-sweep-solution/internal/product/adapter"
-	"Clean-sweep-solution/internal/product/app"
-	"Clean-sweep-solution/pkg/common"
-	server "Clean-sweep-solution/internal/product/delivery/grpc"
+	"clean-sweep-solution/internal/product/adapter"
+	"clean-sweep-solution/internal/product/app"
+	"clean-sweep-solution/pkg/common"
+	server "clean-sweep-solution/internal/product/delivery/grpc"
 	"log"
 	"os"
 )

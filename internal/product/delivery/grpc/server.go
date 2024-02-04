@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"Clean-sweep-solution/internal/genproto/product/pb"
+	"clean-sweep-solution/internal/genproto/product/pb"
 	"fmt"
 	"log"
 	"net"

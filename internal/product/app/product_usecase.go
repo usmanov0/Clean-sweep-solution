@@ -1,8 +1,8 @@
 package app
 
 import (
-	"Clean-sweep-solution/internal/genproto/product/pb"
-	"Clean-sweep-solution/internal/product/domain"
+	"clean-sweep-solution/internal/genproto/product/pb"
+	"clean-sweep-solution/internal/product/domain"
 	"context"
 	"time"
 

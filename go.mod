@@ -1,4 +1,4 @@
-module Clean-Sweep-Solutions_
+module Clean-Sweep-Solutions
 
 go 1.21
 

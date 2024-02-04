@@ -45,3 +45,23 @@ func (u *userRepo) UserExistByEmail(email string) (bool, error) {
 
 	return exist, nil
 }
+
+func (u *userRepo) GetUsers() ([]domain.User, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u *userRepo) FindById(userId int) (*domain.User, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u *userRepo) UpdateUser(user *domain.User) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (u *userRepo) DeleteUser(userId int) error {
+	//TODO implement me
+	panic("implement me")
+}

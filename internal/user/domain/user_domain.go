@@ -4,11 +4,11 @@ import (
 	"time"
 )
 
-type UserRole string
+type UserRoles string
 
 const (
-	adminRole UserRole = "admin"
-	userRole  UserRole = "user"
+	AdminRole UserRoles = "admin"
+	UserRole  UserRoles = "user"
 )
 
 type User struct {
@@ -17,7 +17,7 @@ type User struct {
 	Email     string
 	Phone     string
 	Password  string
-	Role      UserRole
+	Role      UserRoles
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time

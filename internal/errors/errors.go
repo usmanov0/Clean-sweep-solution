@@ -15,4 +15,8 @@ const (
 	ErrEmptyName          UserError = "empty name"
 	ErrEmptyMail          UserError = "empty email"
 	ErrInvalidPhoneNumber UserError = "invalid phone number"
+	ErrUserNotFound       UserError = "user not found"
+	ErrEmailExist         UserError = "email already exists"
+	ErrUpdateFailed       UserError = "failed to update user"
+	ErrUserDeleteFailed   UserError = "failed to delete user"
 )

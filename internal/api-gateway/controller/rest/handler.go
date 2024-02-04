@@ -12,6 +12,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+type ProductInput struct {
+	Name  string `json:"name"`
+	Price uint32  `json:"price"`
+	Count uint32	`json:"count"`
+}
+
+type SuccessResponse struct {
+	Message string `json:"message"`
+}
+
 type Handler struct {
 	productClient grpc_client.Client
 }
@@ -28,7 +42,7 @@ func NewHandler(client grpc_client.Client) *Handler {
 // @Tags products
 // @Accept json
 // @Produce json
-// @Param product body ProductRequest true "Product object that needs to be created"
+// @Param product body ProductInput true "Product object that needs to be created"
 // @Success 201 {object} SuccessResponse
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
@@ -40,13 +54,18 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 		return
 	}
 
-	var product pb.ProductRequest
-	if err = json.Unmarshal(reqBytes, &product); err != nil {
+	var productInp ProductInput
+	if err = json.Unmarshal(reqBytes, &productInp); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to unmarshal JSON"})
 		return
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
+	product :=pb.ProductRequest{
+		Name: productInp.Name,
+		Price: int32(productInp.Price),
+		Count: int32(productInp.Count),
+	}
 	err = h.productClient.CreateProduct(ctx, product)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create product"})

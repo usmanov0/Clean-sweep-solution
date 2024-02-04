@@ -4,7 +4,6 @@ import (
 	"Clean-Sweep-Solutions_/internal/errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
-	"math/rand"
 	"regexp"
 	"strings"
 )
@@ -14,7 +13,7 @@ func ValidateUserInfoForSignUp(fullName, email, phone, password string) error {
 	if strings.TrimSpace(fullName) == "" {
 		return errors.ErrEmptyName
 	}
-	if strings.TrimSpace(email) == "" {
+	if ValidateEmail(email) == errors.ErrInvalidEmailFormat {
 		return errors.ErrEmptyMail
 	}
 	if !isValidPhoneNumber(phone) {
@@ -86,15 +85,4 @@ func HashPassword(password string) (string, error) {
 
 func CheckPassword(password, hashedPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
-}
-
-func RandomPassword() string {
-	var digitBytes string = "0123456789"
-
-	password := make([]byte, 4)
-	for i := range password {
-		password[i] = digitBytes[rand.Intn(len(digitBytes))]
-	}
-
-	return string(password)
 }

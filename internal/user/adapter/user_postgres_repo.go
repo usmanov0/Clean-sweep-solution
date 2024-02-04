@@ -47,13 +47,69 @@ func (u *userRepo) UserExistByEmail(email string) (bool, error) {
 }
 
 func (u *userRepo) GetUsers() ([]domain.User, error) {
-	//TODO implement me
-	panic("implement me")
+	queryStatement := `
+		SELECT u.id, u.full_name, u.email, u.phone, u.role
+		FROM users u 
+	`
+
+	rows, err := u.db.Query(queryStatement)
+	if err != nil {
+		return nil, err
+	}
+	var users []domain.User
+	for rows.Next() {
+		var user domain.User
+		err := rows.Scan(&user.Id, &user.FullName, &user.Email, &user.Phone, &user.Role)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
 }
 
 func (u *userRepo) FindById(userId int) (*domain.User, error) {
-	//TODO implement me
-	panic("implement me")
+	queryStatement := `
+		SELECT u.id, u.full_name, u.email, u.phone, u.password, u.role, u.created_at, u.updated_dt, u.deleted_at
+		FROM users u
+		WHERE u.id = $1
+	`
+	var user domain.User
+	err := u.db.QueryRow(queryStatement, userId).Scan(
+		&user.Id,
+		&user.FullName,
+		&user.Email,
+		&user.Phone,
+		&user.Password,
+		&user.Role,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.DeletedAt,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (u *userRepo) GetHashedPasswordByEmail(email string) (string, error) {
+	var hashedPassword string
+	queryStatement := `
+		SELECT password
+		FROM users
+		WHERE email = $1`
+
+	err := u.db.QueryRow(queryStatement, email).Scan(&hashedPassword)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return "", errors.ErrUserNotFound
+		}
+		return "", err
+	}
+	return hashedPassword, nil
 }
 
 func (u *userRepo) UpdateUser(user *domain.User) error {

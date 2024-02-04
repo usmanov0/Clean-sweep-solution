@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"Clean-Sweep-Solutions_/pkg/utils"
+	"Clean-Sweep-Solutions/pkg/utils"
 	"time"
 )
 

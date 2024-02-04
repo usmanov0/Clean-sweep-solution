@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"Clean-Sweep-Solutions_/pkg/errors"
+	"Clean-Sweep-Solutions/pkg/errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"regexp"

@@ -1,9 +1,9 @@
 package app
 
 import (
-	"Clean-Sweep-Solutions_/internal/user/domain"
-	"Clean-Sweep-Solutions_/pkg/errors"
-	"Clean-Sweep-Solutions_/pkg/utils"
+	"Clean-Sweep-Solutions/internal/user/domain"
+	"Clean-Sweep-Solutions/pkg/errors"
+	"Clean-Sweep-Solutions/pkg/utils"
 	"fmt"
 	"log"
 	"time"

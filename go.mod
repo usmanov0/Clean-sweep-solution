@@ -1,6 +1,6 @@
 module example.com/m
 
-go 1.21.4
+go 1.21
 
 require (
 	github.com/golang/protobuf v1.5.3

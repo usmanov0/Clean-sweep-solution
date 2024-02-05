@@ -79,3 +79,50 @@ func (p *productRepo) UpdateByID(ctx context.Context, productInp pb.UpdateProduc
 
 	return nil
 }
+
+func (p *productRepo) DeleteByID(ctx context.Context, id int) error {
+
+	deleted_at := time.Now()
+
+	_, err := p.db.Exec(`
+		UPDATE products SET deleted_at=$2 WHERE id=$1`,
+		id, deleted_at)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *productRepo) GetPage(offset, limit int) (pb.ProductResponseList, error) {
+	query := `
+			SELECT id, name, price, count, created_at, updated_at
+			FROM products WHERE deleted_at IS NULL
+			LIMIT $1 OFFSET $2
+	`
+	rows, err := p.db.Query(query, limit, offset)
+
+	if err != nil {
+		return pb.ProductResponseList{}, err
+	}
+
+	productsList := pb.ProductResponseList{}
+
+	for rows.Next() {
+
+		var product pb.ProductResponse
+
+		err := rows.Scan(&product.ID, &product.Name, &product.Price,
+			&product.Count, product.CreatedAt, &product.UpdatedAt,
+		)
+
+		if err != nil {
+			return pb.ProductResponseList{}, err
+		}
+		productsList.Products = append(productsList.Products, &product)
+
+	}
+	rows.Close()
+	return productsList, rows.Err()
+}

@@ -22,10 +22,3 @@ type User struct {
 	UpdatedAt time.Time
 	DeletedAt *time.Time
 }
-
-type NewUser struct {
-	FullName string
-	Email    string
-	Phone    string
-	Password string
-}

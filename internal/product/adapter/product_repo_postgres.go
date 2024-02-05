@@ -37,3 +37,45 @@ func (p *productRepo) GetByID(ctx context.Context, ID int) (pb.ProductResponse, 
 
 	return product, nil
 }
+
+func (p *productRepo) UpdateByID(ctx context.Context, productInp pb.UpdateProductRequest) error {
+	setValues := make([]string, 0)
+	args := make([]interface{}, 0)
+	argId := 1
+
+	updatedAt := time.Now()
+
+	if productInp.Name != "" {
+		setValues = append(setValues, fmt.Sprintf("name=%d", argId))
+		args = append(args, productInp.Name)
+		argId++
+	}
+
+	if productInp.Price != 0 {
+		setValues = append(setValues, fmt.Sprintf("price=%d", argId))
+		args = append(args, productInp.Price)
+		argId++
+	}
+
+	if productInp.Count != 0 {
+		setValues = append(setValues, fmt.Sprintf("count=%d", argId))
+		args = append(args, productInp.Count)
+		argId++
+	}
+
+	setValues = append(setValues, fmt.Sprintf("created_at=%d", argId))
+	args = append(args, updatedAt)
+	argId++
+
+	setQuery := strings.Join(setValues, ", ")
+
+	query := fmt.Sprintf(`UPDATE products SET %s WHERE id=$%d`, setQuery, argId+1)
+	args = append(args, productInp.Id)
+	_, err := p.db.Exec(query, args...)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

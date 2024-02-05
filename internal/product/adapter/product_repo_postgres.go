@@ -1,9 +1,13 @@
 package adapter
 
 import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+
 	"example.com/m/internal/genproto/product/pb"
 	"example.com/m/internal/product/domain"
-	"context"
 
 	"github.com/jackc/pgx"
 )

@@ -21,8 +21,9 @@ func NewProductRepo(db *pgx.Conn) domain.ProductRepository {
 }
 
 func (p *productRepo) Insert(ctx context.Context, product pb.ProductRequest) error {
+	CreatedAt := time.Now()
 	_, err := p.db.Exec("INSERT INTO products (name, price, count, created_at) values ($1,$2,$3,$4)",
-		product.Name, int(product.Price), int(product.Count), product.CreatedAt)
+		product.Name, int(product.Price), int(product.Count), CreatedAt)
 
 	return err
 }

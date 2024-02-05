@@ -1,13 +1,14 @@
 package domain
 
 import (
+	"example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/pkg/utils"
 	"time"
 )
 
 type UserFactory struct{}
 
-func (f UserFactory) CreateAdmin(user *NewUser) *User {
+func (f UserFactory) CreateAdmin(user *pb.NewUser) *User {
 	hashedPassword, _ := utils.HashPassword(user.Password)
 	return &User{
 		FullName:  user.FullName,
@@ -21,7 +22,7 @@ func (f UserFactory) CreateAdmin(user *NewUser) *User {
 	}
 }
 
-func (f UserFactory) CreateUser(user *NewUser) *User {
+func (f UserFactory) CreateUser(user *pb.NewUser) *User {
 	hashedPassword, _ := utils.HashPassword(user.Password)
 	return &User{
 		FullName:  user.FullName,

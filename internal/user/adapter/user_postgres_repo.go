@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/internal/user/domain"
 	"example.com/m/pkg/errors"
 	"github.com/jackc/pgx"
@@ -46,7 +47,7 @@ func (u *userRepo) UserExistByEmail(email string) (bool, error) {
 	return exist, nil
 }
 
-func (u *userRepo) GetUsers() ([]domain.User, error) {
+func (u *userRepo) GetUsers() ([]pb.User, error) {
 	queryStatement := `
 		SELECT u.id, u.full_name, u.email, u.phone, u.role
 		FROM users u 
@@ -56,9 +57,9 @@ func (u *userRepo) GetUsers() ([]domain.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	var users []domain.User
+	var users []pb.User
 	for rows.Next() {
-		var user domain.User
+		var user pb.User
 		err := rows.Scan(&user.Id, &user.FullName, &user.Email, &user.Phone, &user.Role)
 		if err != nil {
 			return nil, err
@@ -69,13 +70,13 @@ func (u *userRepo) GetUsers() ([]domain.User, error) {
 	return users, nil
 }
 
-func (u *userRepo) FindById(userId int) (*domain.User, error) {
+func (u *userRepo) FindById(userId *pb.UserId) (*pb.User, error) {
 	queryStatement := `
 		SELECT u.id, u.full_name, u.email, u.phone, u.password, u.role, u.created_at, u.updated_dt, u.deleted_at
 		FROM users u
 		WHERE u.id = $1
 	`
-	var user domain.User
+	var user pb.User
 	err := u.db.QueryRow(queryStatement, userId).Scan(
 		&user.Id,
 		&user.FullName,
@@ -112,12 +113,12 @@ func (u *userRepo) GetHashedPasswordByEmail(email string) (string, error) {
 	return hashedPassword, nil
 }
 
-func (u *userRepo) UpdateUser(user *domain.User) error {
+func (u *userRepo) UpdateUser(user *pb.UserUpdate) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u *userRepo) DeleteUser(userId int) error {
+func (u *userRepo) DeleteUser(id *pb.UserId) error {
 	//TODO implement me
 	panic("implement me")
 }

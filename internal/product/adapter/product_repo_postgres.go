@@ -23,3 +23,17 @@ func (p *productRepo) Insert(ctx context.Context, product pb.ProductRequest) err
 	return err
 }
 
+func (p *productRepo) GetByID(ctx context.Context, ID int) (pb.ProductResponse, error) {
+	var product pb.ProductResponse
+	err := p.db.QueryRow(`
+        SELECT id, name, price, count, created_at, updated_at
+        FROM products
+        WHERE id=$1 AND deleted_at IS NULL
+    `, ID).
+		Scan(&product.ID, &product.Name, &product.Price, &product.Count, &product.CreatedAt, &product.UpdatedAt)
+	if err != nil {
+		return pb.ProductResponse{}, err
+	}
+
+	return product, nil
+}

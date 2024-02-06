@@ -17,11 +17,11 @@ func NewUserRepo(db *pgx.Conn) domain.UserRepository {
 
 func (u *userRepo) Save(user *domain.User) error {
 	queryStatement :=
-		`INSERT INTO users(full_name, email, phone, password, role, created_at, updated_at) 
-		VALUES ($1,$2,$3,$4)`
+		`INSERT INTO users(full_name, email, phone, password, role, created_at, updated_at, deleted_at) 
+		VALUES ($1,$2,$3,$4,$5,$6,$7)`
 
 	_, err := u.db.Exec(queryStatement, user.FullName, user.Email, user.Phone,
-		user.Password, user.Role, user.CreatedAt, user.UpdatedAt)
+		user.Password, user.Role, user.CreatedAt, user.UpdatedAt, user.DeletedAt)
 
 	if err != nil {
 		return errors.ErrFailedExecQuery
@@ -47,46 +47,46 @@ func (u *userRepo) UserExistByEmail(email string) (bool, error) {
 	return exist, nil
 }
 
-func (u *userRepo) GetUsers() ([]pb.User, error) {
+func (u *userRepo) GetUsers(request *pb.UserRequest) (*pb.UsersResponse, error) {
 	queryStatement := `
 		SELECT u.id, u.full_name, u.email, u.phone, u.role
-		FROM users u 
+		FROM users as u 
+		LIMIT $1 OFFSET $2
 	`
 
-	rows, err := u.db.Query(queryStatement)
+	offset := (request.Page - 1) * request.Limit
+
+	rows, err := u.db.Query(queryStatement, request.Limit, offset)
 	if err != nil {
 		return nil, err
 	}
-	var users []pb.User
+	defer rows.Close()
+
+	var users pb.UsersResponse
 	for rows.Next() {
-		var user pb.User
+		var user pb.UserResponse
 		err := rows.Scan(&user.Id, &user.FullName, &user.Email, &user.Phone, &user.Role)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, user)
+		users.Users = append(users.Users, &user)
 	}
-
-	return users, nil
+	return &users, nil
 }
 
-func (u *userRepo) FindById(userId *pb.UserId) (*pb.User, error) {
+func (u *userRepo) FindById(userId *pb.UserId) (*pb.UserResponse, error) {
 	queryStatement := `
-		SELECT u.id, u.full_name, u.email, u.phone, u.password, u.role, u.created_at, u.updated_dt, u.deleted_at
+		SELECT u.id, u.full_name, u.email, u.phone, u.role
 		FROM users u
 		WHERE u.id = $1
 	`
-	var user pb.User
-	err := u.db.QueryRow(queryStatement, userId).Scan(
+	var user pb.UserResponse
+	err := u.db.QueryRow(queryStatement, userId.GetId()).Scan(
 		&user.Id,
 		&user.FullName,
 		&user.Email,
 		&user.Phone,
-		&user.Password,
 		&user.Role,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-		&user.DeletedAt,
 	)
 
 	if err != nil {

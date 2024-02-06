@@ -56,7 +56,7 @@ func ValidatePassword(password string) error {
 
 func isValidPhoneNumber(phone string) bool {
 	if len(phone) < 12 {
-		fmt.Sprintf("error: phone number count is more than 12")
+		fmt.Sprint("error: phone number count is more than 12")
 		return false
 	}
 	phoneRegex := `^\+?[1-9]\d{1,14}$|^[1-9]\d{0,14}$|^[1-9]\d{0,14}-[1-9]\d{0,14}$`

@@ -4,7 +4,6 @@ import (
 	"context"
 	"example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/internal/user/app"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 )
 
@@ -58,44 +57,35 @@ func (u *UserServer) SignInUser(ctx context.Context, req *pb.UserCredentials) *p
 	return &pb.SignInResponse{Success: true}
 }
 
-func (u *UserServer) GetUsers(ctx context.Context, _ *pb.Empty) (*pb.UsersList, error) {
+func (u *UserServer) GetUsers(ctx context.Context, req *pb.UserRequest) (*pb.UsersResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	users, err := u.userUseCase.GetUsers()
+	users, err := u.userUseCase.GetUsers(req)
 
 	if err != nil {
 		return nil, err
 	}
 
-	var pbUsers []*pb.User
-	for _, user := range users {
-		createdAt := timestamppb.New(user.CreatedAt.AsTime())
-		updatedAt := timestamppb.New(user.UpdatedAt.AsTime())
-		pbUser := &pb.User{
-			Id:        user.Id,
-			FullName:  user.FullName,
-			Email:     user.Email,
-			Phone:     user.Phone,
-			CreatedAt: createdAt,
-			UpdatedAt: updatedAt,
-		}
-		pbUsers = append(pbUsers, pbUser)
+	var pbUsers []*pb.UserResponse
+	for _, user := range users.GetUsers() {
+
+		pbUsers = append(pbUsers, user)
 	}
 
-	response := &pb.UsersList{
+	response := &pb.UsersResponse{
 		Users: pbUsers,
 	}
 	return response, nil
 }
 
-func (u *UserServer) GetUser(ctx context.Context, req *pb.UserId) *pb.User {
+func (u *UserServer) GetUser(ctx context.Context, req *pb.UserId) *pb.UserResponse {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	user, err := u.userUseCase.GetUser(req)
 	if err != nil {
-		return &pb.User{}
+		return &pb.UserResponse{}
 	}
 
 	return user

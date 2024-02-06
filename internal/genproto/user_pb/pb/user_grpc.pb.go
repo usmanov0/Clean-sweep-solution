@@ -35,8 +35,8 @@ type UserServiceClient interface {
 	SignUpAdmin(ctx context.Context, in *NewUser, opts ...grpc.CallOption) (*Error, error)
 	SignUpUser(ctx context.Context, in *NewUser, opts ...grpc.CallOption) (*Error, error)
 	SignInUser(ctx context.Context, in *UserCredentials, opts ...grpc.CallOption) (*SignInResponse, error)
-	GetUsers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UsersList, error)
-	GetUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*User, error)
+	GetUsers(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UsersResponse, error)
+	GetUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*UserResponse, error)
 	UpdateUser(ctx context.Context, in *UserUpdate, opts ...grpc.CallOption) (*Error, error)
 	DeleteUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*Error, error)
 }
@@ -76,8 +76,8 @@ func (c *userServiceClient) SignInUser(ctx context.Context, in *UserCredentials,
 	return out, nil
 }
 
-func (c *userServiceClient) GetUsers(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*UsersList, error) {
-	out := new(UsersList)
+func (c *userServiceClient) GetUsers(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UsersResponse, error) {
+	out := new(UsersResponse)
 	err := c.cc.Invoke(ctx, UserService_GetUsers_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -85,8 +85,8 @@ func (c *userServiceClient) GetUsers(ctx context.Context, in *Empty, opts ...grp
 	return out, nil
 }
 
-func (c *userServiceClient) GetUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*User, error) {
-	out := new(User)
+func (c *userServiceClient) GetUser(ctx context.Context, in *UserId, opts ...grpc.CallOption) (*UserResponse, error) {
+	out := new(UserResponse)
 	err := c.cc.Invoke(ctx, UserService_GetUser_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -119,8 +119,8 @@ type UserServiceServer interface {
 	SignUpAdmin(context.Context, *NewUser) (*Error, error)
 	SignUpUser(context.Context, *NewUser) (*Error, error)
 	SignInUser(context.Context, *UserCredentials) (*SignInResponse, error)
-	GetUsers(context.Context, *Empty) (*UsersList, error)
-	GetUser(context.Context, *UserId) (*User, error)
+	GetUsers(context.Context, *UserRequest) (*UsersResponse, error)
+	GetUser(context.Context, *UserId) (*UserResponse, error)
 	UpdateUser(context.Context, *UserUpdate) (*Error, error)
 	DeleteUser(context.Context, *UserId) (*Error, error)
 	mustEmbedUnimplementedUserServiceServer()
@@ -139,10 +139,10 @@ func (UnimplementedUserServiceServer) SignUpUser(context.Context, *NewUser) (*Er
 func (UnimplementedUserServiceServer) SignInUser(context.Context, *UserCredentials) (*SignInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SignInUser not implemented")
 }
-func (UnimplementedUserServiceServer) GetUsers(context.Context, *Empty) (*UsersList, error) {
+func (UnimplementedUserServiceServer) GetUsers(context.Context, *UserRequest) (*UsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
 }
-func (UnimplementedUserServiceServer) GetUser(context.Context, *UserId) (*User, error) {
+func (UnimplementedUserServiceServer) GetUser(context.Context, *UserId) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
 }
 func (UnimplementedUserServiceServer) UpdateUser(context.Context, *UserUpdate) (*Error, error) {
@@ -219,7 +219,7 @@ func _UserService_SignInUser_Handler(srv interface{}, ctx context.Context, dec f
 }
 
 func _UserService_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
+	in := new(UserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -231,7 +231,7 @@ func _UserService_GetUsers_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: UserService_GetUsers_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).GetUsers(ctx, req.(*Empty))
+		return srv.(UserServiceServer).GetUsers(ctx, req.(*UserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	grpc_client "example.com/m/internal/api-gateway/controller/grpc"
-	"example.com/m/internal/api-gateway/controller/rest"
+	grpc_client "example.com/m/internal/api-gateway/delivery/grpc"
+	"example.com/m/internal/api-gateway/delivery/rest"
 	"fmt"
 	"log"
 	"net/http"

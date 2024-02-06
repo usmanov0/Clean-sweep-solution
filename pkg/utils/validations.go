@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"example.com/m/pkg/errors"
+	"example.com/m/internal/user/errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"regexp"

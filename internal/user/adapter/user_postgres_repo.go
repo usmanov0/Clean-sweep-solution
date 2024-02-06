@@ -3,7 +3,7 @@ package adapter
 import (
 	"example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/internal/user/domain"
-	"example.com/m/pkg/errors"
+	"example.com/m/internal/user/errors"
 	"github.com/jackc/pgx"
 )
 

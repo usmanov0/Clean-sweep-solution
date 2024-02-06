@@ -6,7 +6,6 @@ import (
 	"example.com/m/pkg/errors"
 	"example.com/m/pkg/utils"
 	"fmt"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
 )
 
@@ -20,8 +19,8 @@ type UserUseCase interface {
 	SignUpAdmin(user *pb.NewUser) error
 	SignUpUser(user *pb.NewUser) error
 	SignInUser(email, password string) (bool, error)
-	GetUsers() ([]pb.User, error)
-	GetUser(id *pb.UserId) (*pb.User, error)
+	GetUsers(*pb.UserRequest) (*pb.UsersResponse, error)
+	GetUser(id *pb.UserId) (*pb.UserResponse, error)
 	Update(user *pb.UserUpdate) error
 	Delete(id *pb.UserId) error
 }
@@ -123,8 +122,8 @@ func (u *userUseCase) SignInUser(email, password string) (bool, error) {
 	return true, nil
 }
 
-func (u *userUseCase) GetUsers() ([]pb.User, error) {
-	userList, err := u.userRepo.GetUsers()
+func (u *userUseCase) GetUsers(request *pb.UserRequest) (*pb.UsersResponse, error) {
+	userList, err := u.userRepo.GetUsers(request)
 
 	if err != nil {
 		return nil, errors.ErrUserNotFound
@@ -133,7 +132,7 @@ func (u *userUseCase) GetUsers() ([]pb.User, error) {
 	return userList, nil
 }
 
-func (u *userUseCase) GetUser(userId *pb.UserId) (*pb.User, error) {
+func (u *userUseCase) GetUser(userId *pb.UserId) (*pb.UserResponse, error) {
 	user, err := u.userRepo.FindById(userId)
 
 	if err != nil {
@@ -152,8 +151,6 @@ func (u *userUseCase) Update(userUpdate *pb.UserUpdate) error {
 	}
 	existUser.FullName = userUpdate.FullName
 	existUser.Phone = userUpdate.Phone
-	existUser.Password = userUpdate.Password
-	existUser.UpdatedAt = timestamppb.Now()
 
 	err = u.userRepo.UpdateUser(userUpdate)
 	if err != nil {

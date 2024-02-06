@@ -1,34 +1,36 @@
 package app
 
 import (
+	"example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/internal/user/domain"
 	"example.com/m/pkg/errors"
 	"example.com/m/pkg/utils"
 	"fmt"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log"
-	"time"
 )
 
 type userUseCase struct {
 	userRepo    domain.UserRepository
 	userFactory domain.UserFactory
+	pb.UnimplementedUserServiceServer
 }
 
 type UserUseCase interface {
-	SignUpAdmin(user *domain.NewUser) error
-	SignUpUser(user *domain.NewUser) error
+	SignUpAdmin(user *pb.NewUser) error
+	SignUpUser(user *pb.NewUser) error
 	SignInUser(email, password string) (bool, error)
-	GetUsers() ([]domain.User, error)
-	GetUser(userId int) (*domain.User, error)
-	Update(user *domain.User) error
-	Delete(userId int) error
+	GetUsers() ([]pb.User, error)
+	GetUser(id *pb.UserId) (*pb.User, error)
+	Update(user *pb.UserUpdate) error
+	Delete(id *pb.UserId) error
 }
 
 func NewUserUseCase(userRepo domain.UserRepository) UserUseCase {
 	return &userUseCase{userRepo: userRepo}
 }
 
-func (u *userUseCase) SignUpAdmin(admin *domain.NewUser) error {
+func (u *userUseCase) SignUpAdmin(admin *pb.NewUser) error {
 	adminUser := u.userFactory.CreateAdmin(admin)
 
 	err := utils.ValidateUserInfoForSignUp(
@@ -60,11 +62,13 @@ func (u *userUseCase) SignUpAdmin(admin *domain.NewUser) error {
 	}
 }
 
-func (u *userUseCase) SignUpUser(user *domain.NewUser) error {
+func (u *userUseCase) SignUpUser(user *pb.NewUser) error {
 	userSignUp := u.userFactory.CreateUser(user)
 
-	err := utils.ValidateUserInfoForSignIn(
+	err := utils.ValidateUserInfoForSignUp(
+		userSignUp.FullName,
 		userSignUp.Email,
+		userSignUp.Phone,
 		userSignUp.Password,
 	)
 
@@ -97,15 +101,29 @@ func (u *userUseCase) SignInUser(email, password string) (bool, error) {
 		return false, nil
 	}
 
-	ok, err := u.userRepo.UserExistByEmail(email)
-	if !ok || err != nil {
+	userExists, err := u.userRepo.UserExistByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	if !userExists {
 		return false, errors.ErrUserNotFound
+	}
+
+	hashedPassword, err := u.userRepo.GetHashedPasswordByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	err = utils.CheckPassword(password, hashedPassword)
+	if err != nil {
+		return false, errors.ErrBadCredentials
 	}
 
 	return true, nil
 }
 
-func (u *userUseCase) GetUsers() ([]domain.User, error) {
+func (u *userUseCase) GetUsers() ([]pb.User, error) {
 	userList, err := u.userRepo.GetUsers()
 
 	if err != nil {
@@ -115,7 +133,7 @@ func (u *userUseCase) GetUsers() ([]domain.User, error) {
 	return userList, nil
 }
 
-func (u *userUseCase) GetUser(userId int) (*domain.User, error) {
+func (u *userUseCase) GetUser(userId *pb.UserId) (*pb.User, error) {
 	user, err := u.userRepo.FindById(userId)
 
 	if err != nil {
@@ -125,8 +143,8 @@ func (u *userUseCase) GetUser(userId int) (*domain.User, error) {
 	return user, nil
 }
 
-func (u *userUseCase) Update(userUpdate *domain.User) error {
-	var id int
+func (u *userUseCase) Update(userUpdate *pb.UserUpdate) error {
+	var id *pb.UserId
 	existUser, err := u.userRepo.FindById(id)
 
 	if err != nil {
@@ -135,9 +153,9 @@ func (u *userUseCase) Update(userUpdate *domain.User) error {
 	existUser.FullName = userUpdate.FullName
 	existUser.Phone = userUpdate.Phone
 	existUser.Password = userUpdate.Password
-	existUser.UpdatedAt = time.Now()
+	existUser.UpdatedAt = timestamppb.Now()
 
-	err = u.userRepo.UpdateUser(existUser)
+	err = u.userRepo.UpdateUser(userUpdate)
 	if err != nil {
 		return errors.ErrUpdateFailed
 	}
@@ -145,7 +163,7 @@ func (u *userUseCase) Update(userUpdate *domain.User) error {
 	return nil
 }
 
-func (u *userUseCase) Delete(userId int) error {
+func (u *userUseCase) Delete(userId *pb.UserId) error {
 	err := u.userRepo.DeleteUser(userId)
 
 	if err != nil {

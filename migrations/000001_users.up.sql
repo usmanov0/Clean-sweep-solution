@@ -1,6 +1,6 @@
 CREATE TYPE user_role AS ENUM ('admin', 'user');
 
-CREATE TABLE "user" (
+CREATE TABLE "users" (
     "id" SERIAL PRIMARY KEY,
     "full_name" VARCHAR,
     "email" VARCHAR,

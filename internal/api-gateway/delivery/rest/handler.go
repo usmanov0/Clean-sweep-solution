@@ -1,13 +1,16 @@
 package rest
 
 import (
-	grpc_client "example.com/m/internal/api-gateway/delivery/grpc"
-	"example.com/m/internal/genproto/product/pb"
 	"context"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
+
+	grpc_client "example.com/m/internal/api-gateway/delivery/grpc"
+	"example.com/m/internal/genproto/product/pb"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,8 +21,8 @@ type ErrorResponse struct {
 
 type ProductInput struct {
 	Name  string `json:"name"`
-	Price uint32  `json:"price"`
-	Count uint32	`json:"count"`
+	Price uint32 `json:"price"`
+	Count uint32 `json:"count"`
 }
 
 type SuccessResponse struct {
@@ -61,8 +64,8 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	product :=pb.ProductRequest{
-		Name: productInp.Name,
+	product := pb.ProductRequest{
+		Name:  productInp.Name,
 		Price: productInp.Price,
 		Count: productInp.Count,
 	}
@@ -74,4 +77,25 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusCreated, gin.H{"message": "Product created successfully"})
+}
+
+
+
+func getIdFromRequest(c *gin.Context)(int, error){
+	idStr := c.Param("id")
+	if idStr == "" {
+		return 0, errors.New("id must be provided")
+	}
+
+	id64, err := strconv.ParseInt(idStr,10,64)
+	if err!=nil{
+		return 0, err
+	}
+
+	if id64 == 0{
+		return 0, errors.New("id can't be 0")
+	} 
+
+	id :=int(id64)
+	return id, nil
 }

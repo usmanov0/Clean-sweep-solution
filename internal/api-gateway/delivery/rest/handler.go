@@ -79,6 +79,35 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Product created successfully"})
 }
 
+func (h *Handler) GetProductByID(c *gin.Context) {
+	id, err := getIdFromRequest(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	inp :=pb.ID{
+		ID: id,
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	product,err := h.productClient.GetProductByID(ctx,&inp)
+
+	if err != nil {
+		if errors.Is(err, ErrProductNotFound) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, product)
+}
+
 func getIdFromRequest(c *gin.Context) (uint32, error) {
 	idStr := c.Param("id")
 	if idStr == "" {

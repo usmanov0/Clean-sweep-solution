@@ -17,7 +17,7 @@ func (f UserFactory) CreateAdmin(user *pb.NewUser) *User {
 		Password:  hashedPassword,
 		Role:      AdminRole,
 		CreatedAt: time.Now().UTC(),
-		UpdatedAt: time.Now().UTC(),
+		UpdatedAt: nil,
 		DeletedAt: nil,
 	}
 }
@@ -31,7 +31,7 @@ func (f UserFactory) CreateUser(user *pb.NewUser) *User {
 		Password:  hashedPassword,
 		Role:      UserRole,
 		CreatedAt: time.Now().UTC(),
-		UpdatedAt: time.Now().UTC(),
+		UpdatedAt: nil,
 		DeletedAt: nil,
 	}
 }

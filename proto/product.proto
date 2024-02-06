@@ -24,20 +24,11 @@ message PageRequest {
 message ProductResponseList {
     repeated ProductResponse products = 1;
 }
+
 message ProductRequest {
     string name = 1;
     uint32 price = 2;
     uint32 count = 3;
-}
-
-message ProductModel {
-    uint32 ID = 1;
-    string name = 2;
-    uint32 price = 3;
-    uint32 count = 4;
-    google.protobuf.Timestamp created_at = 5; 
-    google.protobuf.Timestamp updated_at = 6;
-    google.protobuf.Timestamp deleted_at = 7;
 }
 
 message ProductResponse {

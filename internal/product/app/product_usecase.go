@@ -11,7 +11,8 @@ type ProductUseCase interface {
 	Create(context.Context, pb.ProductRequest) error
 	GetByID(ctx context.Context, ID pb.ID) (*pb.ProductResponse, error)
 	UpdateProduct(ctx context.Context, productInp pb.UpdateProductRequest) error
-	DeleteProductByID(ctx context.Context, id pb.ID) error
+	DeleteByID(ctx context.Context, id pb.ID) error
+	GetPageProducts(ctx context.Context, page *pb.PageRequest) (*pb.ProductResponseList, error)
 }
 
 func NewProductUseCase(repo domain.ProductRepository) ProductUseCase {
@@ -46,7 +47,7 @@ func (p *productUseCase) GetByID(ctx context.Context, ID pb.ID) (*pb.ProductResp
 }
 
 func (p *productUseCase) UpdateProduct(ctx context.Context, productInp pb.UpdateProductRequest) error {
-	productID :=int(productInp.Id)
+	productID := int(productInp.Id)
 	_, err := p.repo.GetByID(ctx, productID)
 
 	if err != nil {
@@ -60,19 +61,19 @@ func (p *productUseCase) UpdateProduct(ctx context.Context, productInp pb.Update
 	price := int(productInp.Price)
 
 	product := domain.ProductUpdate{
-		Name: &productInp.Name,
+		Name:  &productInp.Name,
 		Price: &price,
 		Count: &count,
 	}
-	
-	if err := p.repo.UpdateByID(ctx, productID,product); err != nil {
+
+	if err := p.repo.UpdateByID(ctx, productID, product); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (p *productUseCase) DeleteProductByID(ctx context.Context, id pb.ID) error {
+func (p *productUseCase) DeleteByID(ctx context.Context, id pb.ID) error {
 	_, err := p.repo.GetByID(ctx, int(id.ID))
 
 	if err != nil {
@@ -87,4 +88,16 @@ func (p *productUseCase) DeleteProductByID(ctx context.Context, id pb.ID) error 
 	}
 
 	return nil
+}
+
+func (p *productUseCase) GetPageProducts(ctx context.Context, page *pb.PageRequest) (*pb.ProductResponseList, error) {
+	limit := int(page.PageSize)
+	offset :=(int(page.PageNumber)-1) * limit
+	products, err := p.repo.GetPage(offset,limit)
+
+	if err!=nil{
+		return nil,err 
+	}
+
+	return &products,nil
 }

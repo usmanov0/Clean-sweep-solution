@@ -18,7 +18,7 @@ func NewProductServer(service app.ProductUseCase) productServer {
 }
 
 func (p *productServer) CreateProduct(ctx context.Context, product *pb.ProductRequest) (*pb.EmptyResponse, error) {
-	return &pb.EmptyResponse{}, p.service.Create(ctx, *product)
+	return nil, p.service.Create(ctx, *product)
 }
 
 func (p *productServer)GetProductByID(ctx context.Context, inp *pb.ID) (*pb.ProductResponse,error){
@@ -26,9 +26,13 @@ func (p *productServer)GetProductByID(ctx context.Context, inp *pb.ID) (*pb.Prod
 }
 
 func (p *productServer) UpdateProductByID(ctx context.Context, productInp *pb.UpdateProductRequest)(*pb.EmptyResponse,error){
-	return &pb.EmptyResponse{}, p.service.UpdateProduct(ctx,*productInp)
+	return nil, p.service.UpdateProduct(ctx,*productInp)
 }
 
 func (p *productServer) DeleteProductByID(ctx context.Context, inp *pb.ID)(*pb.EmptyResponse, error){
-	return &pb.EmptyResponse{}, p.service.DeleteProductByID(ctx,*inp)
+	return nil, p.service.DeleteByID(ctx,*inp)
+}
+
+func (p *productServer) GetProductsByPage(ctx context.Context, inp *pb.PageRequest)(*pb.ProductResponseList,error){
+	return p.service.GetPageProducts(ctx,inp)
 }

@@ -42,3 +42,14 @@ func (c *Client) CreateProduct(ctx context.Context, product product_pb.ProductRe
 	}
 	return nil
 }
+
+func (c *Client) GetProductByID(ctx context.Context, inp *pb.ID)(*pb.ProductResponse,error){
+	
+	products, err:=c.productClient.GetProductByID(ctx,inp)
+
+	if err!=nil{
+		return nil,err
+	}
+
+	return products,nil
+}

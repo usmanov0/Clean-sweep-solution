@@ -33,7 +33,7 @@ services:
       - .env
     environment:
       GOCACHE: /go-cache
-    entrypoint: [ "docker/dev/entrypoint.sh", "./cmd/main.go", "product-server" ]
+    entrypoint: [ "docker/dev/entrypoint.sh", "./internal/product/cmd/main.go", "product-server" ]
 
   order-service:
     build:

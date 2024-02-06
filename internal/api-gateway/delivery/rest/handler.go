@@ -1,7 +1,7 @@
 package rest
 
 import (
-	grpc_client "example.com/m/internal/api-gateway/controller/grpc"
+	grpc_client "example.com/m/internal/api-gateway/delivery/grpc"
 	"example.com/m/internal/genproto/product/pb"
 	"context"
 	"encoding/json"

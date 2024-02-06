@@ -46,7 +46,8 @@ func (p *productUseCase) GetByID(ctx context.Context, ID pb.ID) (*pb.ProductResp
 }
 
 func (p *productUseCase) UpdateProduct(ctx context.Context, productInp pb.UpdateProductRequest) error {
-	_, err := p.repo.GetByID(ctx, int(productInp.Id))
+	productID :=int(productInp.Id)
+	_, err := p.repo.GetByID(ctx, productID)
 
 	if err != nil {
 		if err == domain.ErrorProductNotFound {
@@ -55,7 +56,16 @@ func (p *productUseCase) UpdateProduct(ctx context.Context, productInp pb.Update
 		return err
 	}
 
-	if err := p.repo.UpdateByID(ctx, productInp); err != nil {
+	count := int(productInp.Count)
+	price := int(productInp.Price)
+
+	product := domain.ProductUpdate{
+		Name: &productInp.Name,
+		Price: &price,
+		Count: &count,
+	}
+	
+	if err := p.repo.UpdateByID(ctx, productID,product); err != nil {
 		return err
 	}
 

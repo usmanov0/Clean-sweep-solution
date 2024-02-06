@@ -79,23 +79,21 @@ func (h *Handler) CreateProduct(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Product created successfully"})
 }
 
-
-
-func getIdFromRequest(c *gin.Context)(int, error){
+func getIdFromRequest(c *gin.Context) (uint32, error) {
 	idStr := c.Param("id")
 	if idStr == "" {
 		return 0, errors.New("id must be provided")
 	}
 
-	id64, err := strconv.ParseInt(idStr,10,64)
-	if err!=nil{
+	id64, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
 		return 0, err
 	}
 
-	if id64 == 0{
+	if id64 == 0 {
 		return 0, errors.New("id can't be 0")
-	} 
+	}
 
-	id :=int(id64)
+	id := uint32(id64)
 	return id, nil
 }

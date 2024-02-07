@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"context"
-	"example.com/m/internal/genproto/user_pb/pb"
+	pb "example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/internal/user/app"
 	"time"
 )
@@ -12,7 +12,11 @@ type UserServer struct {
 	pb.UnimplementedUserServiceServer
 }
 
-func (u *UserServer) SignUpAdmin(ctx context.Context, req *pb.NewUser) *pb.Error {
+func NewUserServer(userUseCase app.UserUseCase) pb.UserServiceServer {
+	return &UserServer{userUseCase: userUseCase}
+}
+
+func (u *UserServer) SignUpAdmin(ctx context.Context, req *pb.NewUser) (*pb.Error, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -21,13 +25,13 @@ func (u *UserServer) SignUpAdmin(ctx context.Context, req *pb.NewUser) *pb.Error
 	if err != nil {
 		return &pb.Error{
 			Message: err.Error(),
-		}
+		}, nil
 	}
 
-	return nil
+	return nil, nil
 }
 
-func (u *UserServer) SignUpUser(ctx context.Context, req *pb.NewUser) *pb.Error {
+func (u *UserServer) SignUpUser(ctx context.Context, req *pb.NewUser) (*pb.Error, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -36,13 +40,13 @@ func (u *UserServer) SignUpUser(ctx context.Context, req *pb.NewUser) *pb.Error 
 	if err != nil {
 		return &pb.Error{
 			Message: err.Error(),
-		}
+		}, nil
 	}
 
-	return nil
+	return nil, nil
 }
 
-func (u *UserServer) SignInUser(ctx context.Context, req *pb.UserCredentials) *pb.SignInResponse {
+func (u *UserServer) SignInUser(ctx context.Context, req *pb.UserCredentials) (*pb.SignInResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -51,10 +55,10 @@ func (u *UserServer) SignInUser(ctx context.Context, req *pb.UserCredentials) *p
 	if err != nil {
 		return &pb.SignInResponse{
 			Success: false,
-		}
+		}, err
 	}
 
-	return &pb.SignInResponse{Success: true}
+	return &pb.SignInResponse{Success: true}, nil
 }
 
 func (u *UserServer) GetUsers(ctx context.Context, req *pb.UserRequest) (*pb.UsersResponse, error) {
@@ -79,40 +83,40 @@ func (u *UserServer) GetUsers(ctx context.Context, req *pb.UserRequest) (*pb.Use
 	return response, nil
 }
 
-func (u *UserServer) GetUser(ctx context.Context, req *pb.UserId) *pb.UserResponse {
+func (u *UserServer) GetUser(ctx context.Context, req *pb.UserId) (*pb.UserResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	user, err := u.userUseCase.GetUser(req)
 	if err != nil {
-		return &pb.UserResponse{}
+		return &pb.UserResponse{}, err
 	}
 
-	return user
+	return user, nil
 }
 
-func (u *UserServer) UpdateUser(ctx context.Context, req *pb.UserUpdate) *pb.Error {
+func (u *UserServer) UpdateUser(ctx context.Context, req *pb.UserUpdate) (*pb.Error, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	err := u.userUseCase.Update(req)
 
 	if err != nil {
-		return &pb.Error{Message: "failed to update"}
+		return &pb.Error{Message: "failed to update"}, err
 	}
 
-	return nil
+	return nil, nil
 }
 
-func (u *UserServer) DeleteUser(ctx context.Context, req *pb.UserId) *pb.Error {
+func (u *UserServer) DeleteUser(ctx context.Context, req *pb.UserId) (*pb.Error, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	err := u.userUseCase.Delete(req)
 
 	if err != nil {
-		return &pb.Error{Message: "failed to delete"}
+		return &pb.Error{Message: "failed to delete"}, nil
 	}
 
-	return nil
+	return nil, nil
 }

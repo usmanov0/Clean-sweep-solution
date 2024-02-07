@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"example.com/m/cmd/app/server"
+)
 
 func main() {
-	fmt.Println("doing...")
+	server.RunGrpcUserServer()
 }

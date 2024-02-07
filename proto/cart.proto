@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package proto;
+option go_package = "/pb";
+
+
+service CartService {
+  rpc CreateCart (CreateCartRequest) returns (CreateCartResponse);
+  rpc AddItems (AddItemsRequest) returns (AddItemsResponse);
+  rpc GetCartWithItems (GetCartWithItemsRequest) returns (GetCartWithItemsResponse);
+  rpc GetActiveCarts (GetActiveCartsRequest) returns (GetActiveCartsResponse);
+  rpc GetAllItems (GetAllItemsRequest) returns (GetAllItemsResponse);
+  rpc UpdateCart (UpdateCartRequest) returns (UpdateCartResponse);
+  rpc MarkCartAsPurchased (MarkCartAsPurchasedRequest) returns (MarkCartAsPurchasedResponse);
+  rpc Delete (DeleteRequest) returns (DeleteResponse);
+}
+
+message Cart {
+  int32 id = 1;
+  int32 user_id = 2;
+  bool status = 3;
+}
+
+message CartItems {
+  int32 Id = 1;
+  int32 CartId = 2;
+  int32 ProductId = 3;
+  int32 Quantity = 4;
+}
+
+message CartWithItems {
+  Cart cart = 1;
+  repeated CartItems items = 2;
+}
+
+message CreateCartRequest {
+  int32 user_id = 1;
+}
+
+message CreateCartResponse {
+  int32 cart_id = 1;
+}
+
+message AddItemsRequest {
+  int32 user_id = 1;
+  repeated CartItems items = 2;
+}
+
+message AddItemsResponse {
+  int32 item_id = 1;
+}
+
+message GetCartWithItemsRequest {
+  int32 cart_id = 1;
+}
+
+message GetCartWithItemsResponse {
+  repeated CartWithItems cart_with_items = 1;
+}
+
+message GetActiveCartsRequest {
+  int32 user_id = 1;
+}
+
+message GetActiveCartsResponse {
+  Cart cart = 1;
+}
+
+message GetAllItemsRequest {
+  int32 cart_id = 1;
+}
+
+message GetAllItemsResponse {
+  repeated CartItems items = 1;
+}
+
+message UpdateCartRequest {
+  int32 item_id = 1;
+  int32 quantity = 2;
+}
+
+message UpdateCartResponse {}
+
+message MarkCartAsPurchasedRequest {
+  int32 user_id = 1;
+  int32 cart_id = 2;
+}
+
+message MarkCartAsPurchasedResponse {}
+
+message DeleteRequest {
+  int32 item_id = 1;
+}
+
+message DeleteResponse {}

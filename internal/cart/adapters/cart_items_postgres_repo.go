@@ -1,0 +1,71 @@
+package adapters
+
+import (
+	"example.com/m/internal/cart/domain"
+	"github.com/jackc/pgx"
+)
+
+type cartItemRepo struct {
+	db *pgx.Conn
+}
+
+func NewBasketItemRepository(db *pgx.Conn) domain.CartItemRepository {
+	return &cartItemRepo{db: db}
+}
+
+func (cI *cartItemRepo) AddItem(items *domain.CartItems) (int, error) {
+	queryStatement := `INSERT INTO cart_items(cart_id, product_id, quantity) VALUES($1, $2, $3) RETUNRNING id`
+
+	var id int
+	row := cI.db.QueryRow(queryStatement, items.CartId, items.ProductId, items.Quantity)
+	err := row.Scan(&id)
+
+	if err != nil {
+		return 0, err
+	}
+	return id, nil
+}
+
+func (cI *cartItemRepo) GetAll(cartId int) ([]domain.CartItems, error) {
+	queryStatement := `SELECT c.id, c.cart_id,c.product_id,c.quantity
+	   FROM cart_items as c 
+	   WHERE c.cart_id`
+
+	row, err := cI.db.Query(queryStatement, cartId)
+	if err != nil {
+		return nil, err
+	}
+
+	var Items []domain.CartItems
+	for row.Next() {
+		var cItems domain.CartItems
+		err := row.Scan(&cItems.Id, &cItems.CartId, &cItems.ProductId, &cItems.ProductId)
+		if err != nil {
+			return nil, err
+		}
+		Items = append(Items, cItems)
+	}
+
+	return Items, nil
+}
+
+func (cI *cartItemRepo) UpdateCartItem(cItemId, quantity int) error {
+	queryStatement := `UPDATE cart_items SET quantity = quantity + $1 WHERE id = $2`
+
+	_, err := cI.db.Exec(queryStatement, quantity, cItemId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (cI *cartItemRepo) DeleteProduct(cItemId int) error {
+	queryStatement := `DELETE FROM cart_items WHERE id = $1`
+
+	_, err := cI.db.Exec(queryStatement, cItemId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

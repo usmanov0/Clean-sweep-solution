@@ -13,7 +13,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - .env.example
     environment:
       GOCACHE: /go-cache
     entrypoint: ["./docker/dev/entrypoint.sh", "./cmd/main.go", "user-server"]
@@ -58,7 +58,7 @@ services:
       - .:/app
     working_dir: /app
     env_file:
-      - .env
+      - .env.example
     profiles:
       - donotstart
   db:

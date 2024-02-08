@@ -1,19 +1,39 @@
 package adapters
 
-//
-//import (
-//	"example.com/m/internal/cart/domain"
-//	"example.com/m/internal/genproto/cart_pb/pb"
-//	"github.com/jackc/pgx"
-//)
-//
-//type cartItemRepo struct {
-//	db *pgx.Conn
-//}
-//
-//func NewBasketItemRepository(db *pgx.Conn) domain.CartItemRepository {
-//	return &cartItemRepo{db: db}
-//}
+import (
+	"example.com/m/internal/cart/domain"
+	"example.com/m/internal/genproto/cart_pb/pb"
+	"github.com/jackc/pgx"
+)
+
+type cartItemRepo struct {
+	db *pgx.Conn
+}
+
+func (c cartItemRepo) AddItem(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c cartItemRepo) GetAll(request *pb.GetAllItemsRequest) (*pb.GetAllItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c cartItemRepo) UpdateCartItem(request *pb.UpdateCartRequest) (*pb.UpdateCartResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c cartItemRepo) DeleteProduct(request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func NewBasketItemRepository(db *pgx.Conn) domain.CartItemRepository {
+	return &cartItemRepo{db: db}
+}
+
 //
 //func (cI *cartItemRepo) AddItem(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error) {
 //	queryStatement := `INSERT INTO cart_items(cart_id, product_id, quantity) VALUES($1, $2, $3) RETUNRNING id`

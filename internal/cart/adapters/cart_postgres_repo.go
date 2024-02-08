@@ -1,20 +1,39 @@
 package adapters
 
-//
-//import (
-//	"example.com/m/internal/cart/domain"
-//	"example.com/m/internal/genproto/cart_pb/pb"
-//	"github.com/jackc/pgx"
-//)
-//
-//type cartRepo struct {
-//	db *pgx.Conn
-//}
-//
-//func NewBasketRepository(db *pgx.Conn) domain.CartRepository {
-//	return &cartRepo{db: db}
-//}
-//
+import (
+	"example.com/m/internal/cart/domain"
+	"example.com/m/internal/genproto/cart_pb/pb"
+	"github.com/jackc/pgx"
+)
+
+type cartRepo struct {
+	db *pgx.Conn
+}
+
+func (c *cartRepo) SaveCart(req *pb.CreateCartRequest) (*pb.CreateCartResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartRepo) GetCartWithItems(request *pb.GetCartWithItemsRequest) (*pb.GetCartWithItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartRepo) GetActiveCart(request *pb.GetActiveCartsRequest) (*pb.GetActiveCartsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartRepo) MarkCartStatusAsTrue(request *pb.MarkCartAsPurchasedRequest) *pb.MarkCartAsPurchasedResponse {
+	//TODO implement me
+	panic("implement me")
+}
+
+func NewBasketRepository(db *pgx.Conn) domain.CartRepository {
+	return &cartRepo{db: db}
+}
+
 //func (c *cartRepo) SaveCart(request *pb.CreateCartRequest) (*pb.CreateCartResponse, error) {
 //	queryStatement := `INSERT INTO cart(ser_id, status) VALUES($1,false) RETURNING id`
 //

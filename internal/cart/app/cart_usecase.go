@@ -1,42 +1,82 @@
 package app
 
-//
-//import (
-//	"example.com/m/internal/cart/domain"
-//	"example.com/m/internal/genproto/cart_pb/pb"
-//)
-//
-//type CartService interface {
-//	CreateCart(request *pb.CreateCartRequest) (*pb.CreateCartResponse, error)
-//	AddItems(userId int, items *domain.CartItems) (int, error)
-//	GetCartWithItems(cartId int) (*domain.CartWithItems, error)
-//	GetActiveCarts(userId int) (*domain.Cart, error)
-//	GetAllItems(cartId int) ([]domain.CartItems, error)
-//	UpdateCart(cItemId, quantity int) error
-//	MarkStatusAsTrue(userId, cartId int) error
-//	Delete(cItemId int) error
-//}
-//
-//type cartService struct {
-//	cartRepo     domain.CartRepository
-//	cartItemRepo domain.CartItemRepository
-//}
-//
-//func NewCartService(cartRepo domain.CartRepository, cartItemRepo domain.CartItemRepository) CartService {
-//	return &cartService{
-//		cartRepo:     cartRepo,
-//		cartItemRepo: cartItemRepo}
-//}
-//
-//func (c *cartService) CreateCart(userID *pb.CreateCartRequest) (*pb.CreateCartResponse, error) {
-//	res, err := c.cartRepo.SaveCart(userID)
-//
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return res, nil
-//}
+import (
+	"example.com/m/internal/cart/domain"
+	"example.com/m/internal/genproto/cart_pb/pb"
+)
+
+type CartService interface {
+	CreateCart(request *pb.CreateCartRequest) (*pb.CreateCartResponse, error)
+	AddItems(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error)
+	GetCartWithItems(*pb.GetCartWithItemsRequest) (*pb.GetCartWithItemsResponse, error)
+	GetActiveCarts(request *pb.GetActiveCartsRequest) (*pb.GetActiveCartsResponse, error)
+	GetAllItems(*pb.GetAllItemsRequest) (*pb.GetAllItemsResponse, error)
+	UpdateCart(request *pb.UpdateCartRequest) *pb.UpdateCartResponse
+	MarkStatusAsTrue(request *pb.MarkCartAsPurchasedRequest) (*pb.MarkCartAsPurchasedResponse, error)
+	Delete(request *pb.DeleteRequest) error
+}
+
+type cartService struct {
+	cartRepo     domain.CartRepository
+	cartItemRepo domain.CartItemRepository
+}
+
+func NewCartService(cartRepo domain.CartRepository, cartItemRepo domain.CartItemRepository) CartService {
+	return &cartService{
+		cartRepo:     cartRepo,
+		cartItemRepo: cartItemRepo}
+}
+
+func (c *cartService) CreateCart(request *pb.CreateCartRequest) (*pb.CreateCartResponse, error) {
+	res, err := c.cartRepo.SaveCart(request)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (c *cartService) AddItems(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error) {
+	_, err := c.cartRepo.GetActiveCart(&pb.GetActiveCartsRequest{UserId: request.UserId})
+	if err != nil {
+		return nil, err
+	}
+
+	var _ int32
+
+	return nil, err
+}
+
+func (c *cartService) GetCartWithItems(request *pb.GetCartWithItemsRequest) (*pb.GetCartWithItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartService) GetActiveCarts(request *pb.GetActiveCartsRequest) (*pb.GetActiveCartsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartService) GetAllItems(request *pb.GetAllItemsRequest) (*pb.GetAllItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartService) UpdateCart(request *pb.UpdateCartRequest) *pb.UpdateCartResponse {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartService) MarkStatusAsTrue(request *pb.MarkCartAsPurchasedRequest) (*pb.MarkCartAsPurchasedResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartService) Delete(request *pb.DeleteRequest) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 //
 //func (c *cartService) AddItems(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error) {
 //	activeCart, err := c.cartRepo.GetActiveCart(&pb.GetActiveCartsRequest{UserId: request.UserId})

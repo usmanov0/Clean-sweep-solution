@@ -4,29 +4,29 @@ import (
 	"example.com/m/internal/genproto/user_pb/pb"
 	"example.com/m/internal/user/adapter"
 	"example.com/m/internal/user/app"
-	"google.golang.org/grpc"
-
 	userGrpc1 "example.com/m/internal/user/delivery/grpc"
 	"example.com/m/pkg/common"
 	"fmt"
+	"google.golang.org/grpc"
 	"log"
 	"net"
 	"os"
 )
 
 func RunGrpcUserServer() {
-	db, err := common.ConnectToDb(
-		os.Getenv("POSTGRES_HOST"),
-		os.Getenv("POSTGRES_PORT"),
-		os.Getenv("POSTGRES_DATABASE"),
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-	)
+
+	var Host = "clean-sweep-solution-db-1"
+	var port = "5432"
+	var database = "test_database"
+	var user = "postgres"
+	var password = "postgres"
+
+	conn, err := common.ConnectToDb(Host, port, database, user, password)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 
-	userRepo := adapter.NewUserRepo(db)
+	userRepo := adapter.NewUserRepo(conn)
 	userUseCase := app.NewUserUseCase(userRepo)
 
 	userGrpc := userGrpc1.NewUserServer(userUseCase)

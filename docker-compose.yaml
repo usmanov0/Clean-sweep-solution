@@ -17,8 +17,10 @@ services:
     environment:
       GOCACHE: /go-cache
     entrypoint: ["./docker/dev/entrypoint.sh", "./cmd/main.go", "user-server"]
+    depends_on:
+      - db
 
-#  product-service:
+  #  product-service:
 #    build:
 #      context: .
 #      dockerfile: docker/dev/Dockerfile
@@ -64,6 +66,7 @@ services:
   db:
     image: postgres:latest
     environment:
+      POSTGRES_HOST: db
       POSTGRES_DB: test_database
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres

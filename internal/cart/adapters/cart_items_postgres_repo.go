@@ -10,28 +10,28 @@ type cartItemRepo struct {
 	db *pgx.Conn
 }
 
-func (c cartItemRepo) AddItem(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (c cartItemRepo) GetAll(request *pb.GetAllItemsRequest) (*pb.GetAllItemsResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (c cartItemRepo) UpdateCartItem(request *pb.UpdateCartRequest) (*pb.UpdateCartResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (c cartItemRepo) DeleteProduct(request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
 func NewBasketItemRepository(db *pgx.Conn) domain.CartItemRepository {
 	return &cartItemRepo{db: db}
+}
+
+func (c *cartItemRepo) AddItem(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartItemRepo) GetAll(request *pb.GetAllItemsRequest) (*pb.GetAllItemsResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartItemRepo) UpdateCartItem(request *pb.UpdateCartRequest) (*pb.UpdateCartResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *cartItemRepo) DeleteProduct(request *pb.DeleteRequest) (*pb.DeleteResponse, error) {
+	//TODO implement me
+	panic("implement me")
 }
 
 //

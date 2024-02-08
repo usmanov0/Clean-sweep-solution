@@ -8,7 +8,7 @@ import (
 type CartService interface {
 	CreateCart(request *pb.CreateCartRequest) (*pb.CreateCartResponse, error)
 	AddItems(request *pb.AddItemsRequest) (*pb.AddItemsResponse, error)
-	GetCartWithItems(*pb.GetCartWithItemsRequest) (*pb.GetCartWithItemsResponse, error)
+	GetCartWithItems(*pb.GetCartWithItemsRequest) (*pb.CartWithItems, error)
 	GetActiveCarts(request *pb.GetActiveCartsRequest) (*pb.GetActiveCartsResponse, error)
 	GetAllItems(*pb.GetAllItemsRequest) (*pb.GetAllItemsResponse, error)
 	UpdateCart(request *pb.UpdateCartRequest) *pb.UpdateCartResponse
@@ -47,7 +47,7 @@ func (c *cartService) AddItems(request *pb.AddItemsRequest) (*pb.AddItemsRespons
 	return nil, err
 }
 
-func (c *cartService) GetCartWithItems(request *pb.GetCartWithItemsRequest) (*pb.GetCartWithItemsResponse, error) {
+func (c *cartService) GetCartWithItems(request *pb.GetCartWithItemsRequest) (*pb.CartWithItems, error) {
 	//TODO implement me
 	panic("implement me")
 }

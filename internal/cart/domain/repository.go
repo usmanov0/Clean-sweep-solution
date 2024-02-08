@@ -4,7 +4,7 @@ import "example.com/m/internal/genproto/cart_pb/pb"
 
 type CartRepository interface {
 	SaveCart(req *pb.CreateCartRequest) (*pb.CreateCartResponse, error)
-	GetCartWithItems(request *pb.GetCartWithItemsRequest) (*pb.GetCartWithItemsResponse, error)
+	GetCartWithItems(request *pb.GetCartWithItemsRequest) (*pb.CartWithItems, error)
 	GetActiveCart(*pb.GetActiveCartsRequest) (*pb.GetActiveCartsResponse, error)
 	MarkCartStatusAsTrue(request *pb.MarkCartAsPurchasedRequest) *pb.MarkCartAsPurchasedResponse
 }

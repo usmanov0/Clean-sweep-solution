@@ -7,7 +7,7 @@ option go_package = "/pb";
 service CartService {
   rpc CreateCart (CreateCartRequest) returns (CreateCartResponse);
   rpc AddItems (AddItemsRequest) returns (AddItemsResponse);
-  rpc GetCartWithItems (GetCartWithItemsRequest) returns (GetCartWithItemsResponse);
+  rpc GetCartWithItems (GetCartWithItemsRequest) returns (CartWithItems);
   rpc GetActiveCarts (GetActiveCartsRequest) returns (GetActiveCartsResponse);
   rpc GetAllItems (GetAllItemsRequest) returns (GetAllItemsResponse);
   rpc UpdateCart (UpdateCartRequest) returns (UpdateCartResponse);

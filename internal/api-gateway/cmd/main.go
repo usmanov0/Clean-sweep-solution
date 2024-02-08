@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-// @title Clean-sweep-solution_App 
+// @title Clean-sweep-solution_App
 // @version 1.0
 // @description API Server for Clean-sweep-solution Application
 

@@ -42,3 +42,46 @@ func (c *Client) CreateProduct(ctx context.Context, product product_pb.ProductRe
 	}
 	return nil
 }
+
+func (c *Client) GetProductByID(ctx context.Context, inp *pb.ID)(*pb.ProductResponse,error){
+	
+	products, err:=c.productClient.GetProductByID(ctx,inp)
+
+	if err!=nil{
+		return nil,err
+	}
+
+	return products,nil
+}
+
+func (c *Client) GetProductsByPage(ctx context.Context, inp *pb.PageRequest)(*pb.ProductResponseList,error){
+
+	listProduct, err := c.productClient.GetProductByPage(ctx, inp)
+
+	if err !=nil{
+		return nil,err
+	}
+
+	return listProduct, nil
+}
+
+func (c *Client) DeleteProductByID(ctx context.Context, inp *pb.ID)error{
+
+	_, err :=c.productClient.DeleteProductByID(ctx,inp)
+	if err!=nil{
+		return err
+	}
+
+	return nil
+}
+
+func (c *Client) UpdateProductByID(ctx context.Context,inp *pb.UpdateProductRequest)error{
+
+	_, err:=c.productClient.UpdateProductByID(ctx,inp)
+
+	if err!=nil{
+		return err
+	}
+
+	return nil
+}
